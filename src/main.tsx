@@ -6,9 +6,13 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
     // IMPORTING STYLESHEETS
 import './css/index.css'
+    // IMPORTING PROVIDERS
+import TodoContextProvider from './contexts/TodoContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement).render(
   <React.StrictMode>
-    <App />
+    <TodoContextProvider>
+        <App />
+    </TodoContextProvider>
   </React.StrictMode>,
 )
