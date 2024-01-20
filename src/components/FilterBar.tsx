@@ -5,7 +5,7 @@ import {FilterBarProps} from "../types/Props"
 export default function FilterBar({formData, handleformData, loading, changeAllTodoData}: FilterBarProps){
     return(
         // A CONTAINER FOR THE FILTERBAR COMPONENT
-        <div className="flex space-x-4 items-center">
+        <div className="flex space-x-4 items-center mb-4">
             <select 
                 name="filter"
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleformData(e)}
@@ -20,7 +20,7 @@ export default function FilterBar({formData, handleformData, loading, changeAllT
             <button 
                 disabled={loading}
                 onClick={() => changeAllTodoData("complete")}
-                className="text-sm px-2 py-1 bg-purple-500 text-white rounded"
+                className="text-sm px-2 py-1 bg-purple-500 text-white rounded h-[48px]"
             >Mark All Completed</button>
         </div>
     )

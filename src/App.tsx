@@ -150,55 +150,62 @@ export default function App() {
     }, [todoContextError])
 
     return (
-        // THE CONTAINER FOR THE WHOLE APPLICATION
-        <div className="max-w-4xl mx-auto sm:mt-8 p-4 bg-gray-100 rounded">
-            <h2 className="mt-3 mb-6 text-2xl font-bold text-center uppercase">Personal To Do App</h2>
-            
-            {/* THIS COMPONENT HANDLES ENTERING A NEW NOTE */}
-            <InputBar
-                loading={isLoading}
-                handleFormData={handleFormData}
-                formName="text"
-                formValue={formData.text}
-                placeholder="Enter your Todo note here"
-                handleClick={addTodosData}
-            ><BsPlus/></InputBar>
-
-            {/*  A CONTAINER FOR THE FILTER AND SEARCH COMPONENTS */}
-            <div className="flex items-center justify-between">
-                {/* THIS COMPONENT HANDLES FILTERING THE TODOLIST */}
-                <FilterBar
-                    formData={{filter: formData.filter}}
-                    handleformData={handleFormData}
-                    loading={isLoading}
-                    changeAllTodoData={changeAllTodosData}
-                />
-
-                {/* THIS COMPONENT HANDLES SEARCHING FOR A NOTE */}
+        // THE CONTAINER FOR THE WHOLE WINDOW
+        <div className="min-h-full flex justify-center items-center transition-all duration-500 ease-in-out flex-col w-full overflow-x-hidden">
+            {/* THE CONTAINER TO THE TO-DO APPLICATION */}
+            <div className="sm:mt-8 p-4 bg-gray-100 rounded h-full transition-all duration-500 ease-in-out w-[80%] flex flex-col">
+                <h2 className="mt-3 mb-6 text-2xl font-bold text-center uppercase flex flex-col justify-center items-center">Personal To Do App</h2>
+                
+                {/* THIS COMPONENT HANDLES ENTERING A NEW NOTE */}
                 <InputBar
                     loading={isLoading}
                     handleFormData={handleFormData}
-                    formName="search"
-                    formValue={formData.search}
-                    placeholder="Enter Text here to search"
-                    handleClick={searchTodoList}
-                ><BsSearch/></InputBar>
-            </div>
+                    formName="text"
+                    formValue={formData.text}
+                    placeholder="Enter your Todo note here"
+                    handleClick={addTodosData}
+                ><BsPlus/></InputBar>
 
-            {/* A CONTAINER FOR THE TODOS */}
-            <ul>
-                {/* CONITIONALLY RENDERING THE ERROR OR THE LIST OF TODOS OR A LOADING MESAGE */}
-                {
-                    error || isLoading
-                        ?
-                    <li className="my-2 text-sm italic">{error ? error : "Loading..."}</li>
-                        :
-                    <>
-                        <li className="my-2 text-sm italic">All yor notes here...</li>
-                        {generateTodosArray()}
-                    </>
-                }
-            </ul>
-        </div>
+                {/*  A CONTAINER FOR THE FILTER AND SEARCH COMPONENTS */}
+                <div className="flex items-center justify-between lg:w-[130%] flex-col md:flex-row md:justify-evenly">
+                    {/* THIS COMPONENT HANDLES FILTERING THE TODOLIST */}
+                    <FilterBar
+                        formData={{filter: formData.filter}}
+                        handleformData={handleFormData}
+                        loading={isLoading}
+                        changeAllTodoData={changeAllTodosData}
+                    />
+
+                    {/* THIS COMPONENT HANDLES SEARCHING FOR A NOTE */}
+                    <InputBar
+                        loading={isLoading}
+                        handleFormData={handleFormData}
+                        formName="search"
+                        formValue={formData.search}
+                        placeholder="Enter Text here to search"
+                        handleClick={searchTodoList}
+                    ><BsSearch/></InputBar>
+                </div>
+
+                {/* A CONTAINER FOR THE TODOS */}
+                <ul>
+                    {/* CONITIONALLY RENDERING THE ERROR OR THE LIST OF TODOS OR A LOADING MESAGE */}
+                    {
+                        !todoList.length
+                            ?
+                        <li className="my-2 text-sm italic">No to-do items added</li>
+                            :
+                            error || isLoading
+                                ?
+                            <li className="my-2 text-sm italic">{error ? error : "Loading..."}</li>
+                                :
+                            <>
+                                <li className="my-2 text-sm italic">All yor notes here...</li>
+                                {generateTodosArray()}
+                            </>
+                    }
+                </ul>
+            </div>
+        </div>        
     )
 }

@@ -6,20 +6,20 @@ import {InputBarProps} from "../types/Props"
 export default function InputBar({handleFormData, loading, formName, handleClick, formValue, children, placeholder="Enter text here"}: InputBarProps){
     return (
         // THE CONTAINER FOR THE INPUTBAR COMPONENT
-        <div className="flex items-center mb-4">
+        <div className="flex items-center mb-4 mx-auto justify-center gap-[10px]">
             <input 
                 type="text" 
                 name={formName}
                 placeholder={placeholder}
                 value={formValue}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFormData(e)}
-                className="flex-grow p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                className="p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 lg:w-[150%]"
             />
 
             <button 
                 disabled={loading}
                 onClick={() => handleClick()}
-                className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
+                className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"
             >{children}</button>
         </div>
     )
