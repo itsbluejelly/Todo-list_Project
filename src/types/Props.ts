@@ -1,23 +1,22 @@
 // IMPORTING NECESARY FILES
     // IMPORTING MODULES
-import {ReactNode} from "react"
+import {Dispatch, ReactNode} from "react"
     // IMPORTING TYPES
-import {AppFormData, TodoType, TodoContextReducerActionType} from "./Types"
+import {AppFormData, TodoType} from "./Types"
     // IMPORTING GENERICS
-import {Prettier, ObjectEmitter, ObjectFilterer} from "./Generics"
-
-// DEFINING PROPS FOR THE TODOCONTEXT PROVIDER
-export type TodoContextProviderProps = { children: ReactNode }
+import {ObjectEmitter, ObjectFilterer} from "./Generics"
+import { UnknownAction } from "@reduxjs/toolkit/react"
 
 // DEFINING PROPS FOR THE INPUTBAR COMPONENT
-export type InputBarProps = Prettier<TodoContextProviderProps & {
+export type InputBarProps = {
     formName: keyof ObjectEmitter<AppFormData, "filter">,
     formValue: ObjectEmitter<AppFormData, "filter">[keyof ObjectEmitter<AppFormData, "filter">]
     handleFormData: (e: React.ChangeEvent<HTMLInputElement>) => void,
     loading: boolean,
     handleClick: (searchTerm?: string) => void,
-    placeholder?: string
-}>
+    placeholder?: string,
+    children: ReactNode
+}
 
 // DEFINING PROPS FOR THE FILTERBAR COMPONENT
 export type FilterBarProps = {
@@ -31,5 +30,5 @@ export type FilterBarProps = {
 export type TodoProps = {
     todo: TodoType,
     index: number,
-    handleClick: React.Dispatch<TodoContextReducerActionType>
+    handleClick: Dispatch<UnknownAction>
 }

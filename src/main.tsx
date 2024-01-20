@@ -7,12 +7,14 @@ import App from './App.tsx'
     // IMPORTING STYLESHEETS
 import './css/index.css'
     // IMPORTING PROVIDERS
-import TodoContextProvider from './contexts/TodoContext.tsx'
+import { Provider } from 'react-redux'
+    // IMPORTING STORES
+import Store from './redux/Store.tsx'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement).render(
   <React.StrictMode>
-    <TodoContextProvider>
+    <Provider store={Store}>
         <App />
-    </TodoContextProvider>
+    </Provider>
   </React.StrictMode>,
 )

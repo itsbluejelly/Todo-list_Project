@@ -4,8 +4,8 @@ import {TodoProps} from "../types/Props"
     // IMPORTING COMPONENTS
 import {BsToggleOff, BsToggleOn, BsTrash, BsCheck} from "react-icons/bs"
 import {FaTimes} from "react-icons/fa"
-    // IMPORTING ENUMS
-import {TODO_CONTEXT_REDUCER_ACTION_TYPE} from "../types/Enums"
+    // IMPORTING ACTIONS
+import {toggleTodo, removeTodo, markComplete, markIncomplete} from "../redux/TodoContextReducer"
 
 // DECLARING A FUNCTION THAT RETURNS A TODO COMPONENT
 export default function Todo({todo, index, handleClick}: TodoProps){
@@ -19,38 +19,24 @@ export default function Todo({todo, index, handleClick}: TodoProps){
             <div className="space-x-3 ml-8">
                 <button
                     className="mr-2 text-sm bg-blue-500 text-white sm:px-2 py-1 px-1 rounded"
-                    
-                    onClick={() => handleClick({
-                        type: TODO_CONTEXT_REDUCER_ACTION_TYPE.TOGGLE_TODO,
-                        payload: {id: todo.id}
-                    })}
+                    onClick={() => handleClick(toggleTodo({ id: todo.id }))}
                 >{todo.filter === "complete" ? <BsToggleOff/> : <BsToggleOn/>}</button>
 
                 <button
                     className="mr-2 text-sm bg-red-500 text-white sm:px-2 py-1 px-1 rounded"
-                    
-                    onClick={() => handleClick({
-                        type: TODO_CONTEXT_REDUCER_ACTION_TYPE.REMOVE_TODO,
-                        payload: {id: todo.id}
-                    })}
+                    onClick={() => handleClick(removeTodo({ id: todo.id }))}
                 ><BsTrash/></button>
 
                 <button
                     className={`mr-2 text-sm ${todo.filter === "incomplete" ? "bg-blue-500" : "bg-yellow-500"} text-white sm:px-2 py-1 px-1 rounded`}
 
-                    onClick={() => {
+                    onClick={() => 
                         todo.filter === "complete"
                             ?
-                        handleClick({
-                            type: TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_INCOMPLETE,
-                            payload: {id: todo.id}
-                        })
+                        handleClick(markIncomplete({ id: todo.id }))
                             :
-                        handleClick({
-                            type: TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_COMPLETE,
-                            payload: {id: todo.id}
-                        })  
-                    }}
+                        handleClick(markComplete({ id: todo.id }))
+                    }
 
                 >{todo.filter === "incomplete" ? <BsCheck/> : <FaTimes/>}</button>
             </div>

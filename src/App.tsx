@@ -3,18 +3,18 @@
 import React from "react"
 import {v4 as uuid} from "uuid"
     // IMPORTING HOOKS
-import TodoContextHook from "./hooks/TodoContextHook"
+import {useDispatch, useSelector} from "react-redux"
     // IMPORTING GUARDS
 import {arrayHasTodos} from "./types/Guards"
-    // IMPORTING ENUMS
-import {TODO_CONTEXT_REDUCER_ACTION_TYPE} from "./types/Enums"
     // IMPORTING COMPONENTS
 import InputBar from "./components/InputBar"
 import { BsPlus, BsSearch } from "react-icons/bs"
 import FilterBar from "./components/FilterBar"
 import Todo from "./components/Todo"
     // IMPORTING TYPES
-import {AppFormData, TodoType} from "./types/Types"
+import {AppFormData, TodoType, RootState} from "./types/Types"
+    // IMPORTING ACTIONS
+import {createTodo, addTodo, markAllComplete, markAllIncomplete} from "./redux/TodoContextReducer"
 
 // DECLARING A FUNCTION THAT RETURNS AN APP COMPONENT
 export default function App() {
@@ -30,8 +30,10 @@ export default function App() {
         filter: "none"
     })
 
-    // OBTAINING THE TODOCONTEXT'S STATE AND DISPATCH FROM ITS HOOK
-    const {todoList, error: todoContextError, dispatch} = TodoContextHook()
+    // OBTAINING THE TODOCONTEXT FROM THE STORE
+    const {todoList, error: todoContextError} = useSelector((state: RootState) => state.TodoContext)
+    // OBTAINING THE DISPATCH FUNCTION FROM THE HOOK
+    const dispatch = useDispatch()
 
     // A FUNCTION TO FETCH THE TODOS DATA
     const fetchTodosData: () => void = React.useCallback(() => {
@@ -48,11 +50,7 @@ export default function App() {
                     throw new Error("The data obtained is not of the required TodoType format")
                 }
 
-                dispatch({
-                    type: TODO_CONTEXT_REDUCER_ACTION_TYPE.CREATE_TODO,
-                    payload: parsedTodos
-                })
-
+                dispatch(createTodo(parsedTodos))
                 setError('')
             }
         }catch(error: unknown){
@@ -78,15 +76,11 @@ export default function App() {
                 throw new Error("You must write something in order to add a note")
             }
 
-            dispatch({
-                type: TODO_CONTEXT_REDUCER_ACTION_TYPE.ADD_TODO,
-                
-                payload: {
-                    text: formData.text.trim(),
-                    id: uuid(),
-                    filter: "incomplete"
-                }
-            })
+            dispatch(addTodo({
+                text: formData.text,
+                filter: "incomplete",
+                id: uuid()
+            }))
 
             setError('')
         }catch(error: unknown){
@@ -118,9 +112,9 @@ export default function App() {
         
         filter === "complete"
             ?
-        dispatch({ type: TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_ALL_COMPLETE })
+        dispatch(markAllComplete())
             :
-        dispatch({ type: TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_ALL_INCOMPLETE })
+        dispatch(markAllIncomplete())
 
         setIsLoading(false)
     }
@@ -135,6 +129,7 @@ export default function App() {
             todo={todo}
             index={index + 1}
             handleClick={dispatch}
+            key={todo.id}
         />)
     }
 

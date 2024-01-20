@@ -17,11 +17,19 @@ export default function FilterBar({formData, handleformData, loading, changeAllT
                 <option value="incomplete">Incompleted</option>
             </select>
 
-            <button 
-                disabled={loading}
-                onClick={() => changeAllTodoData("complete")}
-                className="text-sm px-2 py-1 bg-purple-500 text-white rounded h-[48px]"
-            >Mark All Completed</button>
+            <div className="flex flex-col h-[50px] gap-[10px] md:flex-row justify-center items-center">
+                <button 
+                    disabled={loading}
+                    onClick={() => changeAllTodoData("complete")}
+                    className="text-[10px] px-2 py-1 bg-purple-500 text-white rounded h-[20px] w-auto p-[20px] text-wrap"
+                >All Completed</button>
+
+                <button 
+                    disabled={loading}
+                    onClick={() => changeAllTodoData("incomplete")}
+                    className="text-[10px] px-2 py-1 bg-red-500 text-white rounded h-[20px] w-auto p-[20px] text-wrap"
+                >All Incompleted</button>
+            </div>
         </div>
     )
 }
