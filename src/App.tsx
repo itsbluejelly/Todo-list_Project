@@ -12,8 +12,9 @@ import {TODO_CONTEXT_REDUCER_ACTION_TYPE} from "./types/Enums"
 import InputBar from "./components/InputBar"
 import { BsPlus, BsSearch } from "react-icons/bs"
 import FilterBar from "./components/FilterBar"
+import Todo from "./components/Todo"
     // IMPORTING TYPES
-import {AppFormData} from "./types/Types"
+import {AppFormData, TodoType} from "./types/Types"
 
 // DECLARING A FUNCTION THAT RETURNS AN APP COMPONENT
 export default function App() {
@@ -25,7 +26,8 @@ export default function App() {
         // A STATE TO KEEP TRACK OF THE FORMDATA
     const [formData, setFormData] = React.useState<AppFormData>({ 
         text: '',
-        search: '' 
+        search: '',
+        filter: "none"
     })
 
     // OBTAINING THE TODOCONTEXT'S STATE AND DISPATCH FROM ITS HOOK
@@ -61,7 +63,7 @@ export default function App() {
     }, [dispatch])
 
     // A FUNCTION TO HANDLE THE FORMDATA
-    function handleFormData(e: React.ChangeEvent<HTMLInputElement>): void{
+    function handleFormData(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void{
         const {name, value} = e.target
         setFormData(prevFormData => ({...prevFormData, [name]: value}))
     }
@@ -90,26 +92,50 @@ export default function App() {
         }catch(error: unknown){
             setError(`${(error as Error).name}: ${(error as Error).message}`)
         }finally{
+            setFormData(prevFormData => ({...prevFormData, text: '', search: ''}))
             setIsLoading(false)
         }
     }
 
     // A FUNCTION TO SEARCH THROUGH THE LIST OF TODOS
-    function searchTodoList(word: string): void{
-        setIsLoading(true)
+    function searchTodoList(): void{
         setError('')
 
         try{
-            if(!word){
+            const {search} = formData
+            
+            if(!search){
                 throw new Error("You must write something in order to find a note")
             }
-
-            todoList.filter(todo => todo.text.includes(word.trim().toLowerCase() || word.trim().toUpperCase()))
         }catch(error: unknown){
             setError(`${(error as Error).name}: ${(error as Error).message}`)
-        }finally{
-            setIsLoading(false)
         }
+    }
+
+    // A FUNCTION TO CHANGE THE FILTER FIELD FOR ALL TODOS DATA
+    function changeAllTodosData(filter: "complete" | "incomplete"): void{
+        setIsLoading(true)
+        
+        filter === "complete"
+            ?
+        dispatch({ type: TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_ALL_COMPLETE })
+            :
+        dispatch({ type: TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_ALL_INCOMPLETE })
+
+        setIsLoading(false)
+    }
+
+    // A FUNCTION TO GENERATE AN ARRAY OF TODOS
+    function generateTodosArray(): JSX.Element[]{
+        const filteredTodos: TodoType[] = todoList.filter(todo => 
+            (todo.text.includes(formData.search.toLowerCase()) || todo.text.includes(formData.search.toLowerCase())) 
+            && (formData.filter === "none" ? todo : todo.filter === formData.filter))
+
+        return filteredTodos.map((todo, index) => <Todo
+            todo={todo}
+            index={index + 1}
+            handleClick={dispatch}
+        />)
     }
 
     // DEFINING USEEFECTS
@@ -141,7 +167,12 @@ export default function App() {
             {/*  A CONTAINER FOR THE FILTER AND SEARCH COMPONENTS */}
             <div className="flex items-center justify-between">
                 {/* THIS COMPONENT HANDLES FILTERING THE TODOLIST */}
-                <FilterBar/>
+                <FilterBar
+                    formData={{filter: formData.filter}}
+                    handleformData={handleFormData}
+                    loading={isLoading}
+                    changeAllTodoData={changeAllTodosData}
+                />
 
                 {/* THIS COMPONENT HANDLES SEARCHING FOR A NOTE */}
                 <InputBar
@@ -150,12 +181,24 @@ export default function App() {
                     formName="search"
                     formValue={formData.search}
                     placeholder="Enter Text here to search"
-                    handleClick={() => searchTodoList(formData.search)}
+                    handleClick={searchTodoList}
                 ><BsSearch/></InputBar>
             </div>
 
-            {/* CONITIONALLY RENDERING THE ERROR OR THE LIST OF TODOS */}
-            {error && <h2 className="font-bold text-center text-2xl uppercase">{error}</h2>}
+            {/* A CONTAINER FOR THE TODOS */}
+            <ul>
+                {/* CONITIONALLY RENDERING THE ERROR OR THE LIST OF TODOS OR A LOADING MESAGE */}
+                {
+                    error || isLoading
+                        ?
+                    <li className="my-2 text-sm italic">{error ? error : "Loading..."}</li>
+                        :
+                    <>
+                        <li className="my-2 text-sm italic">All yor notes here...</li>
+                        {generateTodosArray()}
+                    </>
+                }
+            </ul>
         </div>
     )
 }

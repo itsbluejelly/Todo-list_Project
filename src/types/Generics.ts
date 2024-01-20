@@ -12,3 +12,8 @@ export type ObjectFilterer<UniversalType extends object, SpecifiedKey extends ke
 export type Prettier<Type extends object> = {
     [key in keyof Type]: Type[key]
 }
+
+// A GENERIC TO FILTER OUT A KEY-VALUE PAIR FROM AN OBJECT
+export type ObjectEmitter<UniversalType extends object, SpecifiedKey extends keyof UniversalType> = {
+    [key in keyof UniversalType as key extends SpecifiedKey ? never : key]: UniversalType[key]
+}

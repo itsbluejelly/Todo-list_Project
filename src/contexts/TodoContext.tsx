@@ -53,13 +53,12 @@ export function TodoContextReducer(state: TodoContextReducerStateType, action: T
         }case TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_COMPLETE: {
             const {id} = action.payload
             const foundTodo: TodoType | undefined = state.todoList.find(todo => todo.id === id)
-            const initialTodoList: TodoType[] = state.todoList.filter(todo => todo.id !== id)
 
             if(!foundTodo){
                 return {...state, error: `The Todo item of id ${id} does not exist`}
             }
 
-            const savedList: TodoType[] = [...initialTodoList, {...foundTodo, filter: "complete"}]
+            const savedList: TodoType[] = state.todoList.map(todo => todo.id === id ? {...foundTodo, filter: "complete"} : todo)
             localStorage.removeItem("todoList")
             localStorage.setItem("todoList", JSON.stringify(savedList))
             
@@ -67,13 +66,12 @@ export function TodoContextReducer(state: TodoContextReducerStateType, action: T
         }case TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_INCOMPLETE: {
             const {id} = action.payload
             const foundTodo: TodoType | undefined = state.todoList.find(todo => todo.id === id)
-            const initialTodoList: TodoType[] = state.todoList.filter(todo => todo.id !== id)
 
             if(!foundTodo){
                 return {...state, error: `The Todo item of id ${id} does not exist`}
             }
 
-            const savedList: TodoType[] = [...initialTodoList, {...foundTodo, filter: "incomplete"}]
+            const savedList: TodoType[] = state.todoList.map(todo => todo.id === id ? {...foundTodo, filter: "incomplete"} : todo)
             localStorage.removeItem("todoList")
             localStorage.setItem("todoList", JSON.stringify(savedList))
             
@@ -95,13 +93,12 @@ export function TodoContextReducer(state: TodoContextReducerStateType, action: T
         }case TODO_CONTEXT_REDUCER_ACTION_TYPE.TOGGLE_TODO: {
             const {id} = action.payload
             const foundTodo: TodoType | undefined = state.todoList.find(todo => todo.id === id)
-            const initialTodoList: TodoType[] = state.todoList.filter(todo => todo.id !== id)
 
             if(!foundTodo){
                 return {...state, error: `The Todo item of id ${id} does not exist`}
             }
 
-            const savedList: TodoType[] = [...initialTodoList, {...foundTodo, filter: foundTodo.filter === "complete" ? "incomplete" : "complete"}]
+            const savedList: TodoType[] = state.todoList.map(todo => todo.id === id ? {...foundTodo, filter: foundTodo.filter === "complete" ? "incomplete" : "complete"} : todo)
             localStorage.removeItem("todoList")
             localStorage.setItem("todoList", JSON.stringify(savedList))
             

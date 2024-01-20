@@ -35,5 +35,6 @@ export type TodoContextType = Prettier<TodoContextReducerStateType & { dispatch:
 // A TYPE FOR THE APPFORMDATA
 export type AppFormData = { 
     text: string,
-    search: string 
+    search: string,
+    filter: "none" | "complete" | "incomplete" 
 }
