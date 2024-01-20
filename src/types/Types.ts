@@ -31,5 +31,9 @@ export type TodoContextReducerActionType = ActionUnionObjectsGenerator<{
 
 // A TYPE FOR THE TODO CONTEXT
 export type TodoContextType = Prettier<TodoContextReducerStateType & { dispatch: React.Dispatch<TodoContextReducerActionType> }>
+
 // A TYPE FOR THE APPFORMDATA
-export type AppFormData = { text: string }
+export type AppFormData = { 
+    text: string,
+    search: string 
+}

@@ -10,8 +10,9 @@ import {arrayHasTodos} from "./types/Guards"
 import {TODO_CONTEXT_REDUCER_ACTION_TYPE} from "./types/Enums"
     // IMPORTING COMPONENTS
 import InputBar from "./components/InputBar"
+import { BsPlus, BsSearch } from "react-icons/bs"
     // IMPORTING TYPES
-import {AppFormData} from "./types/Types"
+import {AppFormData, TodoType} from "./types/Types"
 
 // DECLARING A FUNCTION THAT RETURNS AN APP COMPONENT
 export default function App() {
@@ -21,7 +22,10 @@ export default function App() {
         // A STATE TO KEEP TRACK OF WHETHER THE APPLICATION IS LOADING
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
         // A STATE TO KEEP TRACK OF THE FORMDATA
-    const [formData, setFormData] = React.useState<AppFormData>({ text: '' })
+    const [formData, setFormData] = React.useState<AppFormData>({ 
+        text: '',
+        search: '' 
+    })
 
     // OBTAINING THE TODOCONTEXT'S STATE AND DISPATCH FROM ITS HOOK
     const {todoList, error: todoContextError, dispatch} = TodoContextHook()
@@ -89,6 +93,25 @@ export default function App() {
         }
     }
 
+    // A FUNCTION TO SEARCH THROUGH THE LIST OF TODOS
+    function searchTodoList(word: string): void{
+        setIsLoading(true)
+        setError('')
+
+        try{
+            if(!word){
+                throw new Error("You must write something in order to add a note")
+            }
+
+            const filteredTodos: TodoType[] = todoList.filter(todo => todo.text.includes(word.trim().toLowerCase() || word.trim().toUpperCase()))
+            console.log(filteredTodos)
+        }catch(error: unknown){
+            setError(`${(error as Error).name}: ${(error as Error).message}`)
+        }finally{
+            setIsLoading(false)
+        }
+    }
+
     // DEFINING USEEFECTS
         // A USEEFFECT TO FETCH THE REQUIRED DATA
     React.useEffect(fetchTodosData, [fetchTodosData])
@@ -105,12 +128,25 @@ export default function App() {
         <div className="max-w-4xl mx-auto sm:mt-8 p-4 bg-gray-100 rounded">
             <h2 className="mt-3 mb-6 text-2xl font-bold text-center uppercase">Personal To Do App</h2>
             
+            {/* THIS COMPONENT HANDLES ENTERING A NEW NOTE */}
             <InputBar
-                formData={formData}
                 loading={isLoading}
                 handleFormData={handleFormData}
-                addTodosData={addTodosData}
-            />
+                formName="text"
+                formValue={formData.text}
+                placeholder="Enter your Todo note here"
+                handleClick={addTodosData}
+            ><BsPlus/></InputBar>
+
+            {/* THIS COMPONENT HANDLES SEARCHING FOR A NOTE */}
+            <InputBar
+                loading={isLoading}
+                handleFormData={handleFormData}
+                formName="search"
+                formValue={formData.search}
+                placeholder="Enter Text here to search"
+                handleClick={() => searchTodoList(formData.search)}
+            ><BsSearch/></InputBar>
 
             {/* CONITIONALLY RENDERING THE ERROR OR THE LIST OF TODOS */}
             {error && <h2 className="font-bold text-center text-2xl uppercase">{error}</h2>}
