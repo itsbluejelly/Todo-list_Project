@@ -11,8 +11,9 @@ import {TODO_CONTEXT_REDUCER_ACTION_TYPE} from "./types/Enums"
     // IMPORTING COMPONENTS
 import InputBar from "./components/InputBar"
 import { BsPlus, BsSearch } from "react-icons/bs"
+import FilterBar from "./components/FilterBar"
     // IMPORTING TYPES
-import {AppFormData, TodoType} from "./types/Types"
+import {AppFormData} from "./types/Types"
 
 // DECLARING A FUNCTION THAT RETURNS AN APP COMPONENT
 export default function App() {
@@ -100,11 +101,10 @@ export default function App() {
 
         try{
             if(!word){
-                throw new Error("You must write something in order to add a note")
+                throw new Error("You must write something in order to find a note")
             }
 
-            const filteredTodos: TodoType[] = todoList.filter(todo => todo.text.includes(word.trim().toLowerCase() || word.trim().toUpperCase()))
-            console.log(filteredTodos)
+            todoList.filter(todo => todo.text.includes(word.trim().toLowerCase() || word.trim().toUpperCase()))
         }catch(error: unknown){
             setError(`${(error as Error).name}: ${(error as Error).message}`)
         }finally{
@@ -138,15 +138,21 @@ export default function App() {
                 handleClick={addTodosData}
             ><BsPlus/></InputBar>
 
-            {/* THIS COMPONENT HANDLES SEARCHING FOR A NOTE */}
-            <InputBar
-                loading={isLoading}
-                handleFormData={handleFormData}
-                formName="search"
-                formValue={formData.search}
-                placeholder="Enter Text here to search"
-                handleClick={() => searchTodoList(formData.search)}
-            ><BsSearch/></InputBar>
+            {/*  A CONTAINER FOR THE FILTER AND SEARCH COMPONENTS */}
+            <div className="flex items-center justify-between">
+                {/* THIS COMPONENT HANDLES FILTERING THE TODOLIST */}
+                <FilterBar/>
+
+                {/* THIS COMPONENT HANDLES SEARCHING FOR A NOTE */}
+                <InputBar
+                    loading={isLoading}
+                    handleFormData={handleFormData}
+                    formName="search"
+                    formValue={formData.search}
+                    placeholder="Enter Text here to search"
+                    handleClick={() => searchTodoList(formData.search)}
+                ><BsSearch/></InputBar>
+            </div>
 
             {/* CONITIONALLY RENDERING THE ERROR OR THE LIST OF TODOS */}
             {error && <h2 className="font-bold text-center text-2xl uppercase">{error}</h2>}

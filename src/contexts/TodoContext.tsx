@@ -45,7 +45,7 @@ export function TodoContextReducer(state: TodoContextReducerStateType, action: T
             
             return {...state, todoList: savedList, error: ''}
         }case TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_ALL_INCOMPLETE: {
-            const savedList: TodoType[] = state.todoList.map(todo => ({...todo, filter: "complete"}))
+            const savedList: TodoType[] = state.todoList.map(todo => ({...todo, filter: "incomplete"}))
             localStorage.removeItem("todoList")
             localStorage.setItem("todoList", JSON.stringify(savedList))
 
@@ -87,7 +87,7 @@ export function TodoContextReducer(state: TodoContextReducerStateType, action: T
                 return {...state, error: `The Todo item of id ${id} does not exist`}
             }
 
-            const savedList: TodoType[] = [...initialTodoList]
+            const savedList: TodoType[] = initialTodoList
             localStorage.removeItem("todoList")
             localStorage.setItem("todoList", JSON.stringify(savedList))
             
