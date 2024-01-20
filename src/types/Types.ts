@@ -20,6 +20,7 @@ export type TodoContextReducerStateType = {
 // A TYPE FOR THE TODOCONTEXTREDUCER ACTION
 export type TodoContextReducerActionType = ActionUnionObjectsGenerator<{
     [TODO_CONTEXT_REDUCER_ACTION_TYPE.ADD_TODO]: TodoType,
+    [TODO_CONTEXT_REDUCER_ACTION_TYPE.CREATE_TODO]: TodoType[]
     [TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_ALL_COMPLETE]: never,
     [TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_ALL_INCOMPLETE]: never,
     [TODO_CONTEXT_REDUCER_ACTION_TYPE.MARK_COMPLETE]: ObjectFilterer<TodoType, "id">,
@@ -30,3 +31,5 @@ export type TodoContextReducerActionType = ActionUnionObjectsGenerator<{
 
 // A TYPE FOR THE TODO CONTEXT
 export type TodoContextType = Prettier<TodoContextReducerStateType & { dispatch: React.Dispatch<TodoContextReducerActionType> }>
+// A TYPE FOR THE APPFORMDATA
+export type AppFormData = { text: string }
