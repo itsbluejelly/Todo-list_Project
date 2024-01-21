@@ -12,7 +12,7 @@ import { BsPlus, BsSearch } from "react-icons/bs"
 import FilterBar from "./components/FilterBar"
 import Todo from "./components/Todo"
     // IMPORTING TYPES
-import {AppFormData, TodoType, RootState} from "./types/Types"
+import {AppFormData, TodoType, RootState, StoreDispatch} from "./types/Types"
     // IMPORTING ACTIONS
 import {createTodo, addTodo, markAllComplete, markAllIncomplete} from "./redux/TodoContextReducer"
 
@@ -33,7 +33,7 @@ export default function App() {
     // OBTAINING THE TODOCONTEXT FROM THE STORE
     const {todoList, error: todoContextError} = useSelector((state: RootState) => state.TodoContext)
     // OBTAINING THE DISPATCH FUNCTION FROM THE HOOK
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<StoreDispatch>()
 
     // A FUNCTION TO FETCH THE TODOS DATA
     const fetchTodosData: () => void = React.useCallback(() => {
@@ -157,12 +157,12 @@ export default function App() {
                     handleFormData={handleFormData}
                     formName="text"
                     formValue={formData.text}
-                    placeholder="Enter your Todo note here"
+                    placeholder="Enter your To do note here"
                     handleClick={addTodosData}
                 ><BsPlus/></InputBar>
 
                 {/*  A CONTAINER FOR THE FILTER AND SEARCH COMPONENTS */}
-                <div className="flex items-center justify-between lg:w-[130%] flex-col md:flex-row md:justify-evenly">
+                <div className="flex items-center justify-between w-full flex-col md:flex-row md:justify-between">
                     {/* THIS COMPONENT HANDLES FILTERING THE TODOLIST */}
                     <FilterBar
                         formData={{filter: formData.filter}}

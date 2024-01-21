@@ -6,7 +6,7 @@ import {InputBarProps} from "../types/Props"
 export default function InputBar({handleFormData, loading, formName, handleClick, formValue, children, placeholder="Enter text here"}: InputBarProps){
     return (
         // THE CONTAINER FOR THE INPUTBAR COMPONENT
-        <div className="flex items-center mb-4 mx-auto justify-center gap-[10px]">
+        <div className="flex items-center mb-4 justify-center gap-[10px]">
             <input 
                 type="text" 
                 name={formName}
